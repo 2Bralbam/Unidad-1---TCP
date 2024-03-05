@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace Unidad_1___TCP.Models
 {
-    public class MensajeDTO
+    public class Comentario
     {
-        public int IdPublicacion { get; set; }  
-        public string? Mensaje { get; set; }
         public string Usuario { get; set; } = null!;
-        public string? Foto { get; set; }
+        public string Texto { get; set; } = null!;
         public DateTime Fecha { get; set; }
     }
 }

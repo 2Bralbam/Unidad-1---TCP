@@ -6,7 +6,26 @@
         xmlns:local="clr-namespace:Unidad_1___TCP.Views"
         mc:Ignorable="d"
         Title="HomeView" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+    <DockPanel>
+        <StackPanel HorizontalAlignment="Right">
+            <Label HorizontalAlignment="Center">Servidor</Label>
+            <Ellipse Height="20" Width="20" Fill="Red">
+                
+            </Ellipse>
+            <Label HorizontalAlignment="center">IP: 127.0.0.1</Label>
+            <Button Margin="0 10">Iniciar</Button>
+            <Button>Detener</Button>
+            <StackPanel Height="328" Width="104">
+                <Label HorizontalAlignment="center">Usuarios Online</Label>
+                <ListBox Height="302">
+                    
+                </ListBox>
+            </StackPanel>
+        </StackPanel>
+        <DockPanel>
+            <ListBox>
+                
+            </ListBox>
+        </DockPanel>
+    </DockPanel>
 </Window>
