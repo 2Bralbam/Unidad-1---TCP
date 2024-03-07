@@ -10,6 +10,7 @@
     <Window.DataContext>
         <vm:GaleriaViewModel></vm:GaleriaViewModel>
     </Window.DataContext>
+    
     <Window.Resources>
         <views:ConexionView x:Key="Conexion"></views:ConexionView>
         <views:GaleriaView x:Key="Galeria"></views:GaleriaView>
