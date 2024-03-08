@@ -18,7 +18,7 @@ namespace Unidad1TCPClient.ViewModels
     public class GaleriaViewModel : INotifyPropertyChanged
     {
         #region Variables
-        public bool Conectado { get; set; } = true;
+        public bool Conectado { get; set; } = false;
         public string IP { get; set; } = "127.0.0.1";
         public int Puerto { get; set; } = 55555;
         public string vista = "";
