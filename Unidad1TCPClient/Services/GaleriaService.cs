@@ -53,7 +53,6 @@ namespace Unidad1TCPClient.Services
             }
             return false;
         }
-
         public bool CompartirImagen(string rutaImagen,IPAddress ip,int puerto)
         {
             try
@@ -64,7 +63,6 @@ namespace Unidad1TCPClient.Services
                     {
                         byte[] imageBytes = File.ReadAllBytes(rutaImagen);
                         string base64String = Convert.ToBase64String(imageBytes);
-
                         // Establecer conexión TCP con el servidor
                         Conectar(ip,puerto);
                         EnviarImagen(base64String);
@@ -78,7 +76,6 @@ namespace Unidad1TCPClient.Services
             }
             return false;
         }
-
         public void EliminarImagen(string Imagen, IPAddress ip, int puerto)
         {
             try
@@ -102,8 +99,6 @@ namespace Unidad1TCPClient.Services
                 // Enviar la imagen codificada al servidor
                 byte[] data = Encoding.UTF8.GetBytes(base64String);
                 stream.Write(data, 0, data.Length);
-                stream.Close();
-                client.Close();
             }
             catch (Exception ex)
             {
@@ -112,7 +107,7 @@ namespace Unidad1TCPClient.Services
         }
         bool VerificarConexion()
         {
-            return client.GetStream()!=null;
+            return client.Connected;
         }
         #endregion
     }

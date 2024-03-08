@@ -2,10 +2,12 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,12 +23,12 @@ namespace Unidad1TCPClient.ViewModels
         public bool Conectado { get; set; } = false;
         public string IP { get; set; } = "127.0.0.1";
         public int Puerto { get; set; } = 55555;
-        public string vista = "";
         protected GaleriaService GaleriaService { get; set; } = new();
         public string Imagen { get; set; } = "No hay Imagen";
+        public string? ImagenSeleccionada { get; set; }
         #endregion
         #region Listas
-        public List<string> ImagenesEnviadas { get; set; } = new();
+        public ObservableCollection<string> ListaImagenes { get; set; } = new();
         #endregion 
         #region Comandos
         public ICommand ConectarCommand { get; set; }
@@ -49,12 +51,13 @@ namespace Unidad1TCPClient.ViewModels
             if (GaleriaService.CompartirImagen(Imagen,IPAddress.Parse(IP),Puerto))
             {
                 MessageBox.Show("La imagen se ah enviado al servidor");
-                OnPropertyChanged(nameof(ImagenesEnviadas));
             }
             else
             {
                 MessageBox.Show("La imagen no fue enviada.");
             }
+            ListaImagenes.Add(Imagen);
+            OnPropertyChanged(nameof(ListaImagenes));
         }
         private void SeleccionarFoto()
         {
@@ -77,12 +80,15 @@ namespace Unidad1TCPClient.ViewModels
         }
         private void EliminarFoto(string? imagen)
         {
-            if (imagen != null)
+            if (!string.IsNullOrEmpty(ImagenSeleccionada))
             {
-                //Eliminar en servidor
-                GaleriaService.EliminarImagen(imagen, IPAddress.Parse(IP), Puerto);
-                //Eliminar Localmente
-                ImagenesEnviadas.Remove(imagen);
+                // Eliminar en servidor
+                GaleriaService.EliminarImagen(ImagenSeleccionada, IPAddress.Parse(IP), Puerto);
+                // Eliminar localmente
+                ListaImagenes.Remove(ImagenSeleccionada);
+                // Limpiar la imagen seleccionada
+                ImagenSeleccionada = string.Empty;
+                OnPropertyChanged(nameof(ListaImagenes));
             }
         }
         #endregion
