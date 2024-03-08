@@ -1,10 +1,9 @@
 ﻿using System.Net.Sockets;
 using System.Net;
 using System.Windows;
-using System.Data;
-using Xamarin.Essentials;
 using System.IO;
-using System.Xaml;
+using Microsoft.Win32;
+using DevExpress.Utils.CommonDialogs.Internal;
 
 namespace Unidad1TCPClient.Services
 {
@@ -15,8 +14,7 @@ namespace Unidad1TCPClient.Services
          *  la conexion
          */
         TcpClient client = new();
-        private readonly int puerto = 55555;
-        public void Conectar(IPAddress ip)
+        public bool Conectar(IPAddress ip,int puerto)
         {
             try
             {
@@ -28,17 +26,30 @@ namespace Unidad1TCPClient.Services
                     IPEndPoint ipe = new(ip, puerto);
                     client = new();
                     client.Connect(ipe);
+                    if (client.Connected)
+                    {
+                        return true;
+                    }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+            return false;
         }
-
-        public void Desconectar()
+        public bool Desconectar()
         {
-           client.Close();
+            try
+            {
+                client.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return false;
         }
         public void SubirImagen()
         {
@@ -46,6 +57,35 @@ namespace Unidad1TCPClient.Services
             {
                 if (VerificarConexion())
                 {
+                    OpenFileDialog openFileDialog = new();
+                    openFileDialog.Filter = "Archivos de imagen|*.jpg;*.jpeg;*.png;*.gif|Todos los archivos|*.*";
+
+                    if (openFileDialog?.ShowDialog()!=null)
+                    {
+                        string selectedImagePath = openFileDialog.FileName;
+                        // Aquí puedes procesar la fotografía seleccionada, como mostrarla en la interfaz o enviarla al servidor
+                    }
+                    string imagePath = @"C:\ruta\de\tu\imagen.jpg";
+                    if (File.Exists(imagePath))
+                    {
+                        byte[] imageBytes = File.ReadAllBytes(imagePath);
+                        string base64String = Convert.ToBase64String(imageBytes);
+
+                        // Establecer conexión TCP con el servidor
+                        TcpClient client = new("ip_servidor", 2000);
+                        NetworkStream stream = client.GetStream();
+
+                        // Enviar la imagen codificada al servidor
+                        byte[] data = System.Text.Encoding.ASCII.GetBytes(base64String);
+                        stream.Write(data, 0, data.Length);
+                        Console.WriteLine("Imagen enviada al servidor correctamente.");
+                        stream.Close();
+                        client.Close();
+                    }
+                    else
+                    {
+                        Console.WriteLine("La imagen no fue encontrada en la ruta especificada.");
+                    }
                 }
             }
             catch (Exception ex)
@@ -81,16 +121,17 @@ namespace Unidad1TCPClient.Services
                 MessageBox.Show(ex.Message);
             }
         }
-        string ConvertirImagenBase64(string imagePath)
+        #region Utilidades Varias
+        static string ConvertirImagenBase64(string imagePath)
         {
             byte[] imageBytes = File.ReadAllBytes(imagePath);
             string base64String = Convert.ToBase64String(imageBytes);
-
             return base64String;
         }
         bool VerificarConexion()
         {
             return client.GetStream()!=null;
         }
+        #endregion
     }
 }

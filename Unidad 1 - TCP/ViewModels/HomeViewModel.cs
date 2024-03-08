@@ -20,19 +20,22 @@ namespace Unidad_1___TCP.ViewModels
         ObservableCollection<MensajeDTO> Publicaciones = new();
         public ICommand IniciarServer { get; set; }
         public ICommand DetenerServer { get; set; }
-        public string IP { get
+        public static string IP
+        {
+            get
             {
                 var Direcciones = Dns.GetHostAddresses(Dns.GetHostName());
                 if (Direcciones != null)
                 {
-                    return string.Join("/", Direcciones.Where(x => x.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    return string.Join("/\n", Direcciones.Where(x => x.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                         .Select(x => x.ToString()));
                 }
                 else
                 {
                     return "No hay direcciones";
                 }
-            } }
+            } 
+        }
         public HomeViewModel()
         {
             server.MensajeRecibido += RecibiendoMensaje;
