@@ -31,16 +31,24 @@
             <TextBlock Text="Vista Previa de la Imagen seleccionada:" Foreground="White" FontSize="14" FontWeight="Bold" TextWrapping="Wrap" Width="150"/>
             <Border Width="200" Height="200">
                 <StackPanel>
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Imagen}" Value="No hay Imagen">
+                                    <Setter Property="Visibility" Value="Visible"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Resources>
                     <TextBlock Text="No se ah seleccionado una imagen" 
                                HorizontalAlignment="Center" 
                                VerticalAlignment="Center" 
                                TextWrapping="Wrap" 
                                Foreground="White"
-                               Visibility="Visible"
                                >
-
                     </TextBlock>
-                    <Image Source="{Binding Imagen}" />
+                    <Image Source="{Binding Imagen}" Width="180" Height="180" Margin="7"/>
                 </StackPanel>
             </Border>
             <Border>

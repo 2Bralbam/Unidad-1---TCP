@@ -23,7 +23,7 @@ namespace Unidad1TCPClient.ViewModels
         public int Puerto { get; set; } = 55555;
         public string vista = "";
         protected GaleriaService GaleriaService { get; set; } = new();
-        public string Imagen { get; set; } = "nada";
+        public string Imagen { get; set; } = "No hay Imagen";
         #endregion
         #region Listas
         public List<string> ImagenesEnviadas { get; set; } = new();
@@ -49,7 +49,6 @@ namespace Unidad1TCPClient.ViewModels
             if (GaleriaService.CompartirImagen(Imagen,IPAddress.Parse(IP),Puerto))
             {
                 MessageBox.Show("La imagen se ah enviado al servidor");
-                ImagenesEnviadas.Add(Imagen);
                 OnPropertyChanged(nameof(ImagenesEnviadas));
             }
             else
