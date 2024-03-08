@@ -24,14 +24,16 @@ namespace Unidad1TCPClient.ViewModels
         public string vista = "";
         protected GaleriaService GaleriaService { get; set; } = new();
         public string Imagen { get; set; } = "nada";
-        List<string> ImagenesEnviadas { get; set; } = new();
         #endregion
+        #region Listas
+        public List<string> ImagenesEnviadas { get; set; } = new();
+        #endregion 
         #region Comandos
         public ICommand ConectarCommand { get; set; }
         public ICommand DesconectarCommand { get; set; }
         public ICommand SeleccionarFotoCommand { get; set; }
         public ICommand CompartirFotoCommand { get; set; }
-        public ICommand SalirCommand { get; set; }
+        public ICommand EliminarFotoCommand { get; set; }
         #endregion
         public GaleriaViewModel()
         {
@@ -39,6 +41,7 @@ namespace Unidad1TCPClient.ViewModels
             DesconectarCommand = new RelayCommand(DesconectarServer);
             SeleccionarFotoCommand = new RelayCommand(SeleccionarFoto);
             CompartirFotoCommand = new RelayCommand(CompartirFoto);
+            EliminarFotoCommand = new RelayCommand<string>(EliminarFoto);
         }
         #region Fotos
         private void CompartirFoto()
@@ -72,8 +75,17 @@ namespace Unidad1TCPClient.ViewModels
                 Imagen = "No hay Imagen";
             }
             OnPropertyChanged(nameof(Imagen));
-        } 
-
+        }
+        private void EliminarFoto(string? imagen)
+        {
+            if (imagen != null)
+            {
+                //Eliminar en servidor
+                GaleriaService.EliminarImagen(imagen, IPAddress.Parse(IP), Puerto);
+                //Eliminar Localmente
+                ImagenesEnviadas.Remove(imagen);
+            }
+        }
         #endregion
         #region Servidor
         private void DesconectarServer()

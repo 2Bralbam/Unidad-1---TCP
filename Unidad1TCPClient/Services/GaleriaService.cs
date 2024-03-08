@@ -79,23 +79,7 @@ namespace Unidad1TCPClient.Services
             return false;
         }
 
-       
-
-        public void CargarImagenes()
-        {
-            try
-            {
-                if (VerificarConexion())
-                {
-
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-        public void EliminarImagen()
+        public void EliminarImagen(string Imagen, IPAddress ip, int puerto)
         {
             try
             {
