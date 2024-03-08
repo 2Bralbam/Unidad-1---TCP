@@ -10,7 +10,7 @@
              d:DesignHeight="450" d:DesignWidth="800" Background="LightBlue">
     <DockPanel>
         <!-- Controles para seleccionar y compartir fotos -->
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+        <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Center">
             <StackPanel.Resources>
                 <Style TargetType="Button">
                     <Setter Property="Margin" Value="10"/>
@@ -28,14 +28,29 @@
                     <Setter Property="CornerRadius" Value="7"/>
                 </Style>
             </StackPanel.Resources>
+            <TextBlock Text="Vista Previa de la Imagen seleccionada:" Foreground="White" FontSize="14" FontWeight="Bold" TextWrapping="Wrap" Width="150"/>
+            <Border Width="200" Height="200">
+                <StackPanel>
+                    <TextBlock Text="No se ah seleccionado una imagen" 
+                               HorizontalAlignment="Center" 
+                               VerticalAlignment="Center" 
+                               TextWrapping="Wrap" 
+                               Foreground="White"
+                               Visibility="Visible"
+                               >
+
+                    </TextBlock>
+                    <Image Source="{Binding Imagen}" />
+                </StackPanel>
+            </Border>
             <Border>
                 <Button Content="Seleccionar Foto" Command="{Binding SeleccionarFotoCommand}"/>
             </Border>
             <Border>
-                <Button Content="Compartir Foto"/>
+                <Button Content="Compartir Foto" Command="{Binding CompartirFotoCommand}"/>
             </Border>
             <Border>
-                <Button Content="Salir"/>
+                <Button Content="Salir" Command="{Binding DesconectarCommand}"/>
             </Border>
         </StackPanel>
         <!-- Carrusel de fotos compartidas -->

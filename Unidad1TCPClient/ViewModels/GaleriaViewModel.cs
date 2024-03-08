@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,18 +18,20 @@ namespace Unidad1TCPClient.ViewModels
     public class GaleriaViewModel : INotifyPropertyChanged
     {
         #region Variables
-        public bool Conectado { get; set; } = false;
+        public bool Conectado { get; set; } = true;
         public string IP { get; set; } = "127.0.0.1";
         public int Puerto { get; set; } = 55555;
         public string vista = "";
         protected GaleriaService GaleriaService { get; set; } = new();
-        public string Imagen { get; set; } = "";
+        public string Imagen { get; set; } = "nada";
+        List<string> ImagenesEnviadas { get; set; } = new();
         #endregion
         #region Comandos
         public ICommand ConectarCommand { get; set; }
         public ICommand DesconectarCommand { get; set; }
         public ICommand SeleccionarFotoCommand { get; set; }
         public ICommand CompartirFotoCommand { get; set; }
+        public ICommand SalirCommand { get; set; }
         #endregion
         public GaleriaViewModel()
         {
@@ -37,22 +40,48 @@ namespace Unidad1TCPClient.ViewModels
             SeleccionarFotoCommand = new RelayCommand(SeleccionarFoto);
             CompartirFotoCommand = new RelayCommand(CompartirFoto);
         }
+        #region Fotos
         private void CompartirFoto()
         {
+            if (GaleriaService.CompartirImagen(Imagen,IPAddress.Parse(IP),Puerto))
+            {
+                MessageBox.Show("La imagen se ah enviado al servidor");
+                ImagenesEnviadas.Add(Imagen);
+                OnPropertyChanged(nameof(ImagenesEnviadas));
+            }
+            else
+            {
+                MessageBox.Show("La imagen no fue enviada.");
+            }
         }
-
         private void SeleccionarFoto()
         {
-            
-        }
+            OpenFileDialog openFileDialog = new()
+            {
+                //Permite solo imagenes
+                Filter = "Archivos de imagen|*.jpg;*.jpeg;*.png;*.gif;*.bmp|Todos los archivos (*.*)|*.*"
+            };
+           
+            if (openFileDialog.ShowDialog() == true)
+            {
+                // Aquí puedes manejar la imagen seleccionada, por ejemplo, obtener la ruta del archivo
+                Imagen = openFileDialog.FileName;
+            }
+            else
+            {
+                Imagen = "No hay Imagen";
+            }
+            OnPropertyChanged(nameof(Imagen));
+        } 
 
+        #endregion
         #region Servidor
         private void DesconectarServer()
         {
             if (GaleriaService.Desconectar())
             {
                 Conectado = false;
-                MessageBox.Show("Se ah desconectado del servidor correctamente");
+                MessageBox.Show("Se ah desconectado del servidor");
                 OnPropertyChanged(nameof(Conectado));
             }
         }
@@ -60,9 +89,8 @@ namespace Unidad1TCPClient.ViewModels
         {
             if (GaleriaService.Conectar(IPAddress.Parse(IP), Puerto))
             {
-
+                MessageBox.Show("Se ah conectado al servidor");
                 Conectado = true;
-                MessageBox.Show("Se ah conectado al servidor correctamente");
                 OnPropertyChanged(nameof(Conectado));
             }
         }

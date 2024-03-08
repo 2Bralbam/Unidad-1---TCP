@@ -4,6 +4,8 @@ using System.Windows;
 using System.IO;
 using Microsoft.Win32;
 using DevExpress.Utils.CommonDialogs.Internal;
+using System.Text;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 
 namespace Unidad1TCPClient.Services
 {
@@ -51,40 +53,22 @@ namespace Unidad1TCPClient.Services
             }
             return false;
         }
-        public void SubirImagen()
+
+        public bool CompartirImagen(string rutaImagen,IPAddress ip,int puerto)
         {
             try
             {
                 if (VerificarConexion())
                 {
-                    OpenFileDialog openFileDialog = new();
-                    openFileDialog.Filter = "Archivos de imagen|*.jpg;*.jpeg;*.png;*.gif|Todos los archivos|*.*";
-
-                    if (openFileDialog?.ShowDialog()!=null)
+                    if (File.Exists(rutaImagen))
                     {
-                        string selectedImagePath = openFileDialog.FileName;
-                        // Aquí puedes procesar la fotografía seleccionada, como mostrarla en la interfaz o enviarla al servidor
-                    }
-                    string imagePath = @"C:\ruta\de\tu\imagen.jpg";
-                    if (File.Exists(imagePath))
-                    {
-                        byte[] imageBytes = File.ReadAllBytes(imagePath);
+                        byte[] imageBytes = File.ReadAllBytes(rutaImagen);
                         string base64String = Convert.ToBase64String(imageBytes);
 
                         // Establecer conexión TCP con el servidor
-                        TcpClient client = new("ip_servidor", 2000);
-                        NetworkStream stream = client.GetStream();
-
-                        // Enviar la imagen codificada al servidor
-                        byte[] data = System.Text.Encoding.ASCII.GetBytes(base64String);
-                        stream.Write(data, 0, data.Length);
-                        Console.WriteLine("Imagen enviada al servidor correctamente.");
-                        stream.Close();
-                        client.Close();
-                    }
-                    else
-                    {
-                        Console.WriteLine("La imagen no fue encontrada en la ruta especificada.");
+                        Conectar(ip,puerto);
+                        EnviarImagen(base64String);
+                        return true;
                     }
                 }
             }
@@ -92,7 +76,11 @@ namespace Unidad1TCPClient.Services
             {
                 MessageBox.Show(ex.Message);
             }
+            return false;
         }
+
+       
+
         public void CargarImagenes()
         {
             try
@@ -121,12 +109,22 @@ namespace Unidad1TCPClient.Services
                 MessageBox.Show(ex.Message);
             }
         }
-        #region Utilidades Varias
-        static string ConvertirImagenBase64(string imagePath)
+        #region Metodos Necesarios
+        private void EnviarImagen(string base64String)
         {
-            byte[] imageBytes = File.ReadAllBytes(imagePath);
-            string base64String = Convert.ToBase64String(imageBytes);
-            return base64String;
+            try
+            {
+                NetworkStream stream = client.GetStream();
+                // Enviar la imagen codificada al servidor
+                byte[] data = Encoding.UTF8.GetBytes(base64String);
+                stream.Write(data, 0, data.Length);
+                stream.Close();
+                client.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         bool VerificarConexion()
         {
