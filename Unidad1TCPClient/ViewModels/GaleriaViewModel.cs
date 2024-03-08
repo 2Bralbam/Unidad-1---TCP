@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -15,20 +16,37 @@ namespace Unidad1TCPClient.ViewModels
 {
     public class GaleriaViewModel : INotifyPropertyChanged
     {
+        #region Variables
         public bool Conectado { get; set; } = false;
         public string IP { get; set; } = "127.0.0.1";
         public int Puerto { get; set; } = 55555;
         public string vista = "";
+        protected GaleriaService GaleriaService { get; set; } = new();
+        public string Imagen { get; set; } = "";
+        #endregion
+        #region Comandos
         public ICommand ConectarCommand { get; set; }
         public ICommand DesconectarCommand { get; set; }
-        protected GaleriaService GaleriaService { get; set; } = new();
-        public BitmapImage Imagen { get; set; } = new();
+        public ICommand SeleccionarFotoCommand { get; set; }
+        public ICommand CompartirFotoCommand { get; set; }
+        #endregion
         public GaleriaViewModel()
         {
             ConectarCommand = new RelayCommand(ConectarServer);
             DesconectarCommand = new RelayCommand(DesconectarServer);
+            SeleccionarFotoCommand = new RelayCommand(SeleccionarFoto);
+            CompartirFotoCommand = new RelayCommand(CompartirFoto);
+        }
+        private void CompartirFoto()
+        {
         }
 
+        private void SeleccionarFoto()
+        {
+            
+        }
+
+        #region Servidor
         private void DesconectarServer()
         {
             if (GaleriaService.Desconectar())
@@ -38,7 +56,7 @@ namespace Unidad1TCPClient.ViewModels
                 OnPropertyChanged(nameof(Conectado));
             }
         }
-        void ConectarServer()
+        private void ConectarServer()
         {
             if (GaleriaService.Conectar(IPAddress.Parse(IP), Puerto))
             {
@@ -48,10 +66,14 @@ namespace Unidad1TCPClient.ViewModels
                 OnPropertyChanged(nameof(Conectado));
             }
         }
+        #endregion
+        #region Actualizacion
         void OnPropertyChanged(string Propertyname = null!)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(Propertyname));
         }
+
         public event PropertyChangedEventHandler? PropertyChanged;
+        #endregion
     }
 }

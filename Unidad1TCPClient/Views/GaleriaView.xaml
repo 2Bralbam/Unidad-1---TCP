@@ -29,7 +29,7 @@
                 </Style>
             </StackPanel.Resources>
             <Border>
-                <Button Content="Seleccionar Foto"/>
+                <Button Content="Seleccionar Foto" Command="{Binding SeleccionarFotoCommand}"/>
             </Border>
             <Border>
                 <Button Content="Compartir Foto"/>
