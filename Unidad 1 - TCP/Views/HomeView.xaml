@@ -7,16 +7,58 @@
         mc:Ignorable="d"
         ResizeMode="NoResize"
         Title="HomeView" Height="450" Width="800">
+    <Window.Resources>
+        <Style TargetType="DockPanel">
+            <Setter Property="Background" Value="#1b1e23"/>
+        </Style>
+        <Style TargetType="ListBox">
+            <Setter Property="Background" Value="#1b1e23"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#F4F4F4"/>
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="FontSize" Value="10.5"/>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="#F4F4F4"/>
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="FontSize" Value="10.5"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#1b1e33"/>
+            <Setter Property="Foreground" Value="#F4F4F4"/>
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="FontSize" Value="10.5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+        </Style>
+    </Window.Resources>
     <DockPanel>
         <StackPanel Width="103">
-            <TextBlock TextWrapping="Wrap">Evento: Cumpleaños</TextBlock>
+            <TextBlock TextWrapping="Wrap" Width="100">Evento: Cumpleaños</TextBlock>
             <Label HorizontalAlignment="Center">Servidor</Label>
             <Ellipse Height="20" Width="20" Fill="Red">
 
             </Ellipse>
             <Label HorizontalAlignment="center">IP: 127.0.0.1</Label>
-            <Button Margin="0 10">Iniciar</Button>
-            <Button>Detener</Button>
+            <Button Margin="10">
+                Iniciar
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="5"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
+            <Button Margin="10 0">
+                Detener
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="5"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
             <StackPanel Height="267" Width="104">
                 <Label HorizontalAlignment="center">Usuarios Online</Label>
                 <ListBox Height="250">
@@ -24,36 +66,44 @@
                 </ListBox>
             </StackPanel>
         </StackPanel>
-        <DockPanel>
-            <ListBox>
+        <DockPanel ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel>
-                            <TextBox>Bryan alexis bautista muñoz</TextBox>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-                <ListBox.Items>
-                    <ListBoxItem>
                         <StackPanel Width="682">
                             <TextBlock HorizontalAlignment="Left">29 Febrero 2024</TextBlock>
 
                             <Grid>
                                 <TextBlock Margin="200 0">Bryan Alexis Bautista Muñoz</TextBlock>
                                 <TextBlock Margin="200 20" Height="50" TextWrapping="Wrap" >
-                                    <!--MAXIMO 255 Caracteres-->
-                                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniamaaaa
+<!--MAXIMO 255 Caracteres-->
+"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniamaaaa
 
                                 </TextBlock>
                             </Grid>
-                            <Image Height="290" Width="290"></Image>
+                            <Image Height="250" Width="250"></Image>
                             <Grid>
-                                <Button Height="20" Margin="260,8,372,0">Like</Button>
-                                <Button Height="20" Margin="353,8,279,0">Dislike</Button>
+                                <Button Height="20" Margin="260,8,372,0">
+                                    Like
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="5"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+                                <Button Height="20" Margin="353,8,279,0">
+                                    Dislike
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="5"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
                             </Grid>
                         </StackPanel>
-                    </ListBoxItem>
-                </ListBox.Items>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                
             </ListBox>
         </DockPanel>
     </DockPanel>

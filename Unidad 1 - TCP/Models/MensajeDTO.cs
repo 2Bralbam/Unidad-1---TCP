@@ -8,7 +8,6 @@ namespace Unidad_1___TCP.Models
 {
     public class MensajeDTO
     {
-        public int IdPublicacion { get; set; }  
         public string? Mensaje { get; set; }
         public string Usuario { get; set; } = null!;
         public string? Foto { get; set; }

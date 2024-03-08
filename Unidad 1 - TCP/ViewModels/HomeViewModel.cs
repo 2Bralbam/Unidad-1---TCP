@@ -17,7 +17,7 @@ namespace Unidad_1___TCP.ViewModels
     {
         TCPServer server = new TCPServer();
         public ObservableCollection<string> Usuarios { get; set; } = new();
-        ObservableCollection<MensajeDTO> Publicaciones = new();
+        ObservableCollection<Publicacion> Publicaciones = new();
         public ICommand IniciarServer { get; set; }
         public ICommand DetenerServer { get; set; }
         public string IP { get
@@ -51,18 +51,36 @@ namespace Unidad_1___TCP.ViewModels
 
         private void RecibiendoMensaje(object? sender, MensajeDTO e)
         {
-            e.IdPublicacion = Publicaciones.Count + 1;
+            Publicacion P = new Publicacion() { 
+                IdPublicacion = Publicaciones.Count + 1, 
+                Mensaje = e,
+                Comentarios = new() 
+            };
+            P.IdPublicacion = Publicaciones.Max(x=>x.IdPublicacion) +1;
+            bool IdRepetido = true;
+            while (IdRepetido)
+            {
+                IdRepetido = Publicaciones.Any(x => x.IdPublicacion == P.IdPublicacion);
+                if (IdRepetido)
+                {
+                    P.IdPublicacion = Publicaciones.Max(x => x.IdPublicacion) + 1;
+                    Publicaciones.Add(P);
+                }
+                else
+                {
+                    
+                    IdRepetido = false;
+                    Publicaciones.Add(P);
+                }
+            }
+            
             if(e.Mensaje == "**-")
             {
                 Usuarios.Remove(e.Usuario);
             }
-            else if(e.Mensaje == "**+")
-            {
-                Usuarios.Add(e.Usuario);
-            }
             else
             {
-                Publicaciones.Add(e);
+                Usuarios.Add(e.Usuario);
             }
 
         }
