@@ -3,8 +3,61 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Unidad1TCPClient.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <c
+             xmlns:local="clr-namespace:Unidad1TCPClient.Views" 
+             xmlns:viewmodels="clr-namespace:Unidad1TCPClient.ViewModels" 
+             d:DataContext="{d:DesignInstance Type=viewmodels:GaleriaViewModel}"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800" Background="LightBlue">
+    <DockPanel>
+        <!-- Controles para seleccionar y compartir fotos -->
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Margin" Value="10"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Style>
+                <Style TargetType="Border">
+                    <Setter Property="Background" Value="CadetBlue"/>
+                    <Setter Property="Margin" Value="10,5"/>
+                    <Setter Property="Height" Value="40"/>
+                    <Setter Property="Width" Value="170"/>
+                    <Setter Property="BorderBrush" Value="White"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                    <Setter Property="CornerRadius" Value="7"/>
+                </Style>
+            </StackPanel.Resources>
+            <Border>
+                <Button Content="Seleccionar Foto" Command="{Binding SeleccionarFotoCommand}"/>
+            </Border>
+            <Border>
+                <Button Content="Compartir Foto"/>
+            </Border>
+            <Border>
+                <Button Content="Salir"/>
+            </Border>
+        </StackPanel>
+        <!-- Carrusel de fotos compartidas -->
+        <TextBlock DockPanel.Dock="Top" Margin="10,10,0,0" Foreground="White" FontWeight="Bold">Imagenes Enviadas:</TextBlock>
+        <ListBox x:Name="SharedPhotosList" DockPanel.Dock="Top" BorderThickness="0" Background="White" Margin="10">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel></WrapPanel>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border>
+                        <StackPanel>
+                            <Image Width="100" Height="100" Source="{Binding Imagen}"/>
+                            <Border Background="Red" BorderBrush="White" BorderThickness="1">
+                                <Button BorderThickness="0" Foreground="White" FontWeight="Bold" FontSize="14">Eliminar</Button>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </DockPanel>
 </UserControl>
