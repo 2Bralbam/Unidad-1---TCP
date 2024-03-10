@@ -64,6 +64,7 @@
         </StackPanel>
         <!-- Carrusel de fotos compartidas -->
         <TextBlock DockPanel.Dock="Top" Margin="10,10,0,0" Foreground="White" FontWeight="Bold">Imagenes Enviadas:</TextBlock>
+
         <ListBox ItemsSource="{Binding ListaImagenes}" 
                  SelectedItem="{Binding ImagenSeleccionada}"
                  DockPanel.Dock="Top" 
@@ -78,21 +79,29 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
+                    <Border>
+                        <StackPanel>
+                            <Image Source="{Binding StringFormat={}}" Width="180" Height="180" Margin="7"/>
 
+                            <Button BorderThickness="0"
+                                    Foreground="White"
+                                    Padding="10"
+                                    FontWeight="Bold" FontSize="14"
+                                    Command="{Binding EliminarFotoCommand}"
+                                    Content="Eliminar"
+                            />
+
+                            <TextBlock Text="{Binding ImagenSeleccionada}" 
+                                       Foreground="White" 
+                                       FontSize="14" 
+                                       FontWeight="Bold" 
+                                       TextWrapping="Wrap" 
+                                       Width="150"
+                            />
+                        </StackPanel>
+                    </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Border>
-            <StackPanel>
-                <Image Width="100" Height="100" Source="{Binding Imagen}"/>
-                <Button BorderThickness="0" 
-                Foreground="White" 
-                FontWeight="Bold" FontSize="14" 
-                Command="{Binding EliminarFotoCommand}"
-                Content="Eliminar"></Button>
-                <TextBlock Text="{Binding ImagenSeleccionada}" Foreground="White" FontSize="14" FontWeight="Bold" TextWrapping="Wrap" Width="150"/>
-
-            </StackPanel>
-        </Border>
     </DockPanel>
 </UserControl>

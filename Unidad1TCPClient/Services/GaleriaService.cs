@@ -11,11 +11,14 @@ namespace Unidad1TCPClient.Services
 {
     public class GaleriaService
     {
-        /** Para hacer una conexion TCP Se necesita de un cliente TCP 
-         *  este nos proveera de metodos por defecto necesarios para hacer
-         *  la conexion
-         */
-        TcpClient client = new();
+        /* 
+           Para hacer una conexion TCP Se necesita de un cliente TCP 
+           este nos proveera de metodos por defecto necesarios para hacer
+           la conexion 
+        */
+        private readonly TcpClient client = new();
+
+        // Ya que quiero saber desde el viewmodel si el cliente se conecto correctamente utilizo un booleano
         public bool Conectar(IPAddress ip,int puerto)
         {
             try
@@ -26,14 +29,17 @@ namespace Unidad1TCPClient.Services
                 if (!client.Connected)
                 {
                     IPEndPoint ipe = new(ip, puerto);
-                    client = new();
                     client.Connect(ipe);
-                    if (client.Connected)
+                    /** Verificamos la conexion en caso de que el cliente se conecte y se desconecte de
+                     * manera inesperada
+                     */
+                    if (VerificarConexion())
                     {
                         return true;
                     }
                 }
             }
+            //Manejo de errores
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
@@ -47,6 +53,7 @@ namespace Unidad1TCPClient.Services
                 client.Close();
                 return true;
             }
+            //Manejo de errores
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
@@ -61,19 +68,24 @@ namespace Unidad1TCPClient.Services
                 {
                     if (File.Exists(rutaImagen))
                     {
+                        // obtenemos los bytes de la imagen seleccionada
                         byte[] imageBytes = File.ReadAllBytes(rutaImagen);
+                        // Convertimos los bytes de la imagen recibida a base 64
                         string base64String = Convert.ToBase64String(imageBytes);
                         // Establecer conexión TCP con el servidor
                         Conectar(ip,puerto);
                         EnviarImagen(base64String);
+                        //si todo fue bien
                         return true;
                     }
                 }
             }
+            //Manejo de errores
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+            //si no se logro compartir la imagen regresara un false
             return false;
         }
         public void EliminarImagen(string Imagen, IPAddress ip, int puerto)
@@ -82,9 +94,18 @@ namespace Unidad1TCPClient.Services
             {
                 if (VerificarConexion())
                 {
-
+                    var BytesImagen = File.ReadAllBytes(Imagen);
+                    string base64String = Convert.ToBase64String(BytesImagen);
+                    NetworkStream stream = client.GetStream();
+                    /** Se debe identificar de alguna manera que metodo se utilizara al recibir la imagen,
+                     *  al deserealizar el texto, mostrara la accion que se desea realizar (eliminar) y la imagen que
+                     *  se eliminara (en este caso)
+                     */
+                    byte[] data = Encoding.UTF8.GetBytes("eliminar " + base64String);
+                    stream.Write(data, 0, data.Length);
                 }
             }
+            //Manejo de errores
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
@@ -99,7 +120,12 @@ namespace Unidad1TCPClient.Services
                 // Enviar la imagen codificada al servidor
                 byte[] data = Encoding.UTF8.GetBytes(base64String);
                 stream.Write(data, 0, data.Length);
+                /** El stream se queda abierto en caso de que se quiera mandar mas informacion,
+                 *  en este caso las imagenes ya que se esta utilizando una conexion por el 
+                 *  protocolo TCP no es necesario cerrar la conexion
+                 */
             }
+            //Manejo de errores
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
