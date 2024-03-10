@@ -8,6 +8,7 @@
              d:DataContext="{d:DesignInstance Type=viewmodels:GaleriaViewModel}"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800" Background="LightBlue">
+    
     <DockPanel>
         <!-- Controles para seleccionar y compartir fotos -->
         <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Center">
@@ -18,7 +19,7 @@
                     <Setter Property="Foreground" Value="White"/>
                 </Style>
                 <Style TargetType="Border">
-                    <Setter Property="Background" Value="CadetBlue"/>
+                    <Setter Property="Background" Value="DodgerBlue"/>
                     <Setter Property="Margin" Value="10,5"/>
                     <Setter Property="Height" Value="40"/>
                     <Setter Property="Width" Value="170"/>
@@ -27,7 +28,68 @@
                     <Setter Property="CornerRadius" Value="7"/>
                 </Style>
             </StackPanel.Resources>
+            <Border>
+                <Button Content="Seleccionar Foto" Command="{Binding SeleccionarFotoCommand}"/>
+            </Border>
+            <Border BorderBrush="White" BorderThickness="2" Background="CadetBlue" Margin="10,0">
+                <Border.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="Height" Value="40"/>
+                        <Setter Property="Width" Value="170"/>
+                        <Setter Property="CornerRadius" Value="7"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Imagen}" Value="No hay Imagen">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Resources>
+                <Button Content="Compartir Foto" Background="DodgerBlue" Margin="0" Command="{Binding CompartirFotoCommand}">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="7"/>
+                            <Setter Property="IsEnabled" Value="True"/>
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Imagen}" Value="No hay Imagen">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </Border>
+            <Border Margin="10,5" BorderBrush="White" BorderThickness="2" Background="DodgerBlue" CornerRadius="7" Width="170" Height="40">
+                <Border.Resources>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ImagenSeleccionada}" Value="nada">
+                                <Setter Property="IsEnabled" Value="False"/>
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Resources>
+                <Button Content="Eliminar Foto" Margin="10,5" BorderThickness="0" Background="Transparent" Foreground="White" Command="{Binding EliminarFotoCommand}">
+                    <Button.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="IsEnabled" Value="True"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ImagenSeleccionada}" Value="nada">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </Border>
+            <Border Margin="10,5">
+                <Button Content="Desconectar Servidor" Command="{Binding DesconectarCommand}"/>
+            </Border>
             <TextBlock Text="Vista Previa de la Imagen seleccionada:" Foreground="White" FontSize="14" FontWeight="Bold" TextWrapping="Wrap" Width="150"/>
+
             <Border Width="200" Height="200">
                 <StackPanel>
                     <StackPanel.Resources>
@@ -41,126 +103,46 @@
                         </Style>
                     </StackPanel.Resources>
                     <TextBlock Text="No se ah seleccionado una imagen" 
-                               HorizontalAlignment="Center" 
-                               VerticalAlignment="Center" 
-                               TextWrapping="Wrap" 
-                               Foreground="White"
-                               >
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center" 
+                   TextWrapping="Wrap" 
+                   Foreground="White"
+                   >
                     </TextBlock>
                     <Image Source="{Binding Imagen}" Width="180" Height="180" Margin="7"/>
-
                 </StackPanel>
-            </Border>
-            <Border>
-                <Button Content="Seleccionar Foto" Command="{Binding SeleccionarFotoCommand}"/>
-            </Border>
-            <Border>
-                <Border.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="Background" Value="CadetBlue"/>
-                        <Setter Property="Margin" Value="10,5"/>
-                        <Setter Property="Height" Value="40"/>
-                        <Setter Property="Width" Value="170"/>
-                        <Setter Property="BorderBrush" Value="White"/>
-                        <Setter Property="BorderThickness" Value="2"/>
-                        <Setter Property="CornerRadius" Value="7"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Imagen}" Value="No hay Imagen">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                                <Setter Property="IsEnabled" Value="False"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Border.Resources>
-                <Button Content="Compartir Foto" Command="{Binding CompartirFotoCommand}">
-                    <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="Background" Value="CadetBlue"/>
-                            <Setter Property="Margin" Value="0"/>
-                            <Setter Property="Height" Value="40"/>
-                            <Setter Property="Width" Value="170"/>
-                            <Setter Property="BorderBrush" Value="White"/>
-                            <Setter Property="BorderThickness" Value="2"/>
-                            <Setter Property="CornerRadius" Value="7"/>
-                            
-                            <Setter Property="IsEnabled" Value="True"/>
-                            <Setter Property="Visibility" Value="Visible"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Imagen}" Value="No hay Imagen">
-                                    <Setter Property="IsEnabled" Value="False"/>
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Resources>
-                </Button>
-            </Border>
-            <Border>
-                <Border.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="Background" Value="CadetBlue"/>
-                        <Setter Property="Margin" Value="10,5"/>
-                        <Setter Property="Height" Value="40"/>
-                        <Setter Property="Width" Value="170"/>
-                        <Setter Property="BorderBrush" Value="White"/>
-                        <Setter Property="BorderThickness" Value="2"/>
-                        <Setter Property="CornerRadius" Value="7"/>
-
-                        <Setter Property="IsEnabled" Value="True"/>
-                        <Setter Property="Visibility" Value="Visible"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ImagenSeleccionada}" Value="nada">
-                                <Setter Property="IsEnabled" Value="False"/>
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Border.Resources>
-                <Button Content="Eliminar Foto" BorderThickness="0" Background="Transparent" Foreground="White" Command="{Binding EliminarFotoCommand}">
-                    <Button.Resources>
-                        <Style TargetType="Button">
-                            <Setter Property="IsEnabled" Value="True"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding ImagenSeleccionada}" Value="nada">
-                                    <Setter Property="IsEnabled" Value="False"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Resources>
-                </Button>
-            </Border>
-            <Border>
-                <Button Content="Desconectar Servidor" Command="{Binding DesconectarCommand}"/>
             </Border>
         </StackPanel>
         <!-- Carrusel de fotos compartidas -->
-        <DockPanel DockPanel.Dock="Top" Margin="10,10,0,0">
-            <TextBlock  Foreground="White" DockPanel.Dock="Left" FontWeight="Bold" VerticalAlignment="Center" Margin="30,0">Imagenes Enviadas:</TextBlock>
-        </DockPanel>
-        <ListBox x:Name="Lista"
-                 ItemsSource="{Binding ListaImagenes}" 
-                 SelectedItem="{Binding ImagenSeleccionada}"
-                 DockPanel.Dock="Top" 
-                 BorderThickness="0" 
-                 Background="White" 
-                 Margin="10"
-                 >
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel></WrapPanel>
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Border>
-                        <StackPanel Margin="5">
-                            <Border CornerRadius="7">
-                                <Image Source="{Binding}" Width="100" Height="100" Margin="5"/>
+        <DockPanel DockPanel.Dock="Top" Margin="0,5">
+            <TextBlock  Foreground="White" DockPanel.Dock="Top" FontWeight="Bold" VerticalAlignment="Center" Margin="30,0">Imagenes Compartidas:</TextBlock>
+            <Border Margin="5" CornerRadius="7" Background="White" BorderBrush="DodgerBlue" BorderThickness="3">
+                <ListBox x:Name="Lista"
+                         ItemsSource="{Binding ListaImagenes}" 
+                         SelectedItem="{Binding ImagenSeleccionada}"
+                         DockPanel.Dock="Top" 
+                         BorderThickness="0" 
+                         Background="Transparent" 
+                         Margin="5"
+                         >
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel></WrapPanel>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border>
+                                <StackPanel Margin="5">
+                                    <Border CornerRadius="7">
+                                        <Image Source="{Binding}" Width="100" Height="100" Margin="5"/>
+                                    </Border>
+                                </StackPanel>
                             </Border>
-                        </StackPanel>
-                    </Border>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
+        </DockPanel>
     </DockPanel>
 </UserControl>
