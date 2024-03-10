@@ -6,6 +6,7 @@ using System.IO;
 using System.Net;
 using System.Windows;
 using System.Windows.Input;
+using Unidad1TCPClient.Models;
 using Unidad1TCPClient.Services;
 
 namespace Unidad1TCPClient.ViewModels
@@ -21,6 +22,7 @@ namespace Unidad1TCPClient.ViewModels
         #endregion
         #region Listas
         public ObservableCollection<string> ListaImagenes { get; set; } = new();
+
         private string imagenSeleccionada = "nada";
         public string ImagenSeleccionada {
             get
@@ -33,6 +35,7 @@ namespace Unidad1TCPClient.ViewModels
                 OnPropertyChanged(nameof(ImagenSeleccionada));
             }
         }
+        public MensajeDTO Mensaje { get; set; } = new();
         #endregion
         #region Comandos
         public ICommand ConectarCommand { get; private set; }

@@ -6,6 +6,8 @@ using Microsoft.Win32;
 using DevExpress.Utils.CommonDialogs.Internal;
 using System.Text;
 using CommunityToolkit.Mvvm.Messaging.Messages;
+using Unidad1TCPClient.Models;
+using System.Text.Json;
 
 namespace Unidad1TCPClient.Services
 {
@@ -17,7 +19,7 @@ namespace Unidad1TCPClient.Services
            la conexion 
         */
         private TcpClient client = new();
-
+        public string equipo { get; set; } = "";
         // Ya que quiero saber desde el viewmodel si el cliente se conecto correctamente utilizo un booleano
         public bool Conectar(IPAddress ip,int puerto)
         {
@@ -26,12 +28,23 @@ namespace Unidad1TCPClient.Services
                 /** Esta validacion es necesaria ya que el usuario puede presionar
                  *  2 o más veces el boton para conectar el cliente al servidor
                  */
-                
                 CrearClienteTCP();
                 if (!client.Connected)
                 {
                     IPEndPoint ipe = new(ip, puerto);
+                    equipo = Dns.GetHostName();
+                   
                     client.Connect(ipe);
+
+                    //Mensaje Hello
+                    var msg = new MensajeDTO
+                    {
+                        Fecha = DateTime.Now,
+                        Foto = "**HELLO",
+                        Usuario = equipo
+                    };
+                    EnviarMensaje(msg);
+                    // El cliente no recibe respuesta nunca asi que no es necesario implmentar un metodo para recibir respuesta
                 }
             }
             //Manejo de errores
@@ -46,6 +59,14 @@ namespace Unidad1TCPClient.Services
             //Intentara desconectar el servidor
             try
             {
+                //Mensaje bye
+                var msg = new MensajeDTO
+                {
+                    Fecha = DateTime.Now,
+                    Foto = "**BYE",
+                    Usuario = equipo
+                };
+                EnviarMensaje(msg);
                 client.Close();
             }
             //Manejo de errores
@@ -56,7 +77,7 @@ namespace Unidad1TCPClient.Services
             //Si el cliente no esta conectado regresara true, en caso contrario regresara false
             return !client.Connected;
         }
-        public bool CompartirImagen(string rutaImagen,IPAddress ip,int puerto)
+        public bool CompartirImagen(string rutaImagen)
         {
             try
             {
@@ -110,7 +131,6 @@ namespace Unidad1TCPClient.Services
         {
             client ??= new();
         }
-
         private void EnviarImagen(string base64String)
         {
             try
@@ -128,6 +148,17 @@ namespace Unidad1TCPClient.Services
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+        }
+        public void EnviarMensaje(MensajeDTO m)
+        {
+            if (!string.IsNullOrWhiteSpace(m.Usuario))
+            {
+                var json = JsonSerializer.Serialize(m);
+                byte[] buffer = Encoding.UTF8.GetBytes(json);
+                var ns = client.GetStream();
+                ns.Write(buffer, 0, buffer.Length);
+                ns.Flush();
             }
         }
         #endregion
