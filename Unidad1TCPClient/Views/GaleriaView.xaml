@@ -35,7 +35,7 @@
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding}" Value="No hay Imagen">
-                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Setter Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -67,27 +67,39 @@
                         <Setter Property="BorderBrush" Value="White"/>
                         <Setter Property="BorderThickness" Value="2"/>
                         <Setter Property="CornerRadius" Value="7"/>
+                        
                         <Setter Property="IsEnabled" Value="True"/>
+                        <Setter Property="Visibility" Value="Visible"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ImagenSeleccionada}" Value="nada">
                                 <Setter Property="IsEnabled" Value="False"/>
+                                <Setter Property="Visibility" Value="Collapsed"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </Border.Resources>
 
-                <Button Content="Eliminar Foto" BorderThickness="0" Background="Transparent" Foreground="White" Command="{Binding EliminarFotoCommand}"/>
+                <Button Content="Eliminar Foto" BorderThickness="0" Background="Transparent" Foreground="White" Command="{Binding EliminarFotoCommand}">
+                    <Button.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="IsEnabled" Value="True"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ImagenSeleccionada}" Value="nada">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Resources>
+                </Button>
             </Border>
             <Border>
                 <Button Content="Desconectar Servidor" Command="{Binding DesconectarCommand}"/>
             </Border>
-
         </StackPanel>
         <!-- Carrusel de fotos compartidas -->
         <DockPanel DockPanel.Dock="Top" Margin="10,10,0,0">
             <TextBlock  Foreground="White" DockPanel.Dock="Left" FontWeight="Bold" VerticalAlignment="Center" Margin="30,0">Imagenes Enviadas:</TextBlock>
         </DockPanel>
-
         <ListBox x:Name="Lista"
                  ItemsSource="{Binding ListaImagenes}" 
                  SelectedItem="{Binding ImagenSeleccionada}"

@@ -21,9 +21,19 @@ namespace Unidad1TCPClient.ViewModels
         #endregion
         #region Listas
         public ObservableCollection<string> ListaImagenes { get; set; } = new();
-        public string? ImagenSeleccionada { get; set; }
-
-        #endregion 
+        private string imagenSeleccionada = "nada";
+        public string ImagenSeleccionada {
+            get
+            {
+                return imagenSeleccionada;
+            }
+            set
+            {
+                imagenSeleccionada = value;
+                OnPropertyChanged(nameof(ImagenSeleccionada));
+            }
+        }
+        #endregion
         #region Comandos
         public ICommand ConectarCommand { get; private set; }
         public ICommand DesconectarCommand { get; private set; }
@@ -136,10 +146,12 @@ namespace Unidad1TCPClient.ViewModels
                 ListaImagenes.Remove(ImagenSeleccionada);
                 // Eliminar en servidor
                 // Limpiar la imagen seleccionada
-                ImagenSeleccionada = string.Empty;
+                ImagenSeleccionada = "nada";
 
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(ListaImagenes));
+                OnPropertyChanged(nameof(ImagenSeleccionada));
             }
+            GuardarLista();
         }
         #endregion
         #region Servidor
