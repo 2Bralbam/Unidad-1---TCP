@@ -106,7 +106,7 @@ namespace Unidad1TCPClient.ViewModels
         private void CompartirFoto()
         {
             //Agregar la imagen al servidor
-            if (GaleriaService.CompartirImagen(Imagen,IPAddress.Parse(IP),Puerto))
+            if (GaleriaService.CompartirImagen(Imagen))
             {
                 MessageBox.Show("La imagen se ah compartido");
                 //Agrega la imagen a la lista local
@@ -162,10 +162,8 @@ namespace Unidad1TCPClient.ViewModels
         {
             if (GaleriaService.Desconectar())
             {
-                /** Al desconectar el cliente del servidor mostrara un mensaje y cambiara de vista
-                 */
+                //Al desconectar el cliente del servidor cambiara de vista
                 Conectado = false;
-                MessageBox.Show("Se ah desconectado del servidor");
                 OnPropertyChanged(nameof(Conectado));
             }
         }
@@ -174,9 +172,7 @@ namespace Unidad1TCPClient.ViewModels
             GaleriaService = new();
             if (GaleriaService.Conectar(IPAddress.Parse(IP), Puerto))
             {
-                /** Si la conexion fue exitosa mostrara un mensaje y cambiara la vista
-                 */
-                MessageBox.Show("Se ah conectado al servidor");
+                // Si la conexion fue exitosa cambiara la vista
                 Conectado = true;
                 OnPropertyChanged(nameof(Conectado));
             }
