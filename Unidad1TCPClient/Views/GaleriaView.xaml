@@ -65,11 +65,12 @@
         <!-- Carrusel de fotos compartidas -->
         <TextBlock DockPanel.Dock="Top" Margin="10,10,0,0" Foreground="White" FontWeight="Bold">Imagenes Enviadas:</TextBlock>
 
-        <ListBox ItemsSource="{Binding ListaImagenes}" 
+        <ListBox x:Name="Lista"
+                 ItemsSource="{Binding ListaImagenes}" 
                  SelectedItem="{Binding ImagenSeleccionada}"
                  DockPanel.Dock="Top" 
                  BorderThickness="0" 
-                 Background="White" 
+                 Background="Black" 
                  Margin="10"
                  >
             <ListBox.ItemsPanel>
@@ -79,10 +80,13 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border>
-                        <StackPanel>
-                            <Image Source="{Binding}" Width="180" Height="180" Margin="7"/>
-                            <Button Content="Eliminar Foto" Command="{Binding EliminarFotoCommand}" CommandParameter="{Binding .}"/>
+                    <Border Background="Green">
+                        <StackPanel Margin="5">
+                            <Border CornerRadius="7">
+                                <Image Source="{Binding}" Width="100" Height="100"   Margin="5"/>
+                            </Border>
+
+                            <Button Content="Eliminar Foto" Command="{Binding EliminarFotoCommand}" CommandParameter="{Binding SelectedItem, ElementName=Lista}" />
                         </StackPanel>
                     </Border>
                 </DataTemplate>

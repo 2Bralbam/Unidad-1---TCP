@@ -20,20 +20,16 @@ namespace Unidad1TCPClient.ViewModels
         public string Imagen { get; set; } = "No hay Imagen";
         #endregion
         #region Listas
-        public ObservableCollection<string> ListaImagenes { get; set; } = new()
-        {
-            "C:\\Users\\LuisR\\OneDrive\\Imágenes\\Bluestack\\Screenshot_2024.02.21_22.27.23.201.png",
-            "C:\\Users\\LuisR\\OneDrive\\Imágenes\\Bluestack\\Screenshot_2024.03.05_01.41.33.361.png"
-        };
+        public ObservableCollection<string> ListaImagenes { get; set; } = new();
         public string? ImagenSeleccionada { get; set; }
 
         #endregion 
         #region Comandos
-        public ICommand ConectarCommand { get; set; }
-        public ICommand DesconectarCommand { get; set; }
-        public ICommand SeleccionarFotoCommand { get; set; }
-        public ICommand CompartirFotoCommand { get; set; }
-        public ICommand EliminarFotoCommand { get; set; }
+        public ICommand ConectarCommand { get; private set; }
+        public ICommand DesconectarCommand { get; private set; }
+        public ICommand SeleccionarFotoCommand { get; private set; }
+        public ICommand CompartirFotoCommand { get; private set; }
+        public ICommand EliminarFotoCommand { get; private set; }
         #endregion
         public GaleriaViewModel()
         {
@@ -160,6 +156,7 @@ namespace Unidad1TCPClient.ViewModels
         }
         private void ConectarServer()
         {
+            GaleriaService = new();
             if (GaleriaService.Conectar(IPAddress.Parse(IP), Puerto))
             {
                 /** Si la conexion fue exitosa mostrara un mensaje y cambiara la vista

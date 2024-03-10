@@ -16,7 +16,7 @@ namespace Unidad1TCPClient.Services
            este nos proveera de metodos por defecto necesarios para hacer
            la conexion 
         */
-        private readonly TcpClient client = new();
+        private TcpClient client = new();
 
         // Ya que quiero saber desde el viewmodel si el cliente se conecto correctamente utilizo un booleano
         public bool Conectar(IPAddress ip,int puerto)
@@ -26,17 +26,12 @@ namespace Unidad1TCPClient.Services
                 /** Esta validacion es necesaria ya que el usuario puede presionar
                  *  2 o más veces el boton para conectar el cliente al servidor
                  */
+                
+                CrearClienteTCP();
                 if (!client.Connected)
                 {
                     IPEndPoint ipe = new(ip, puerto);
                     client.Connect(ipe);
-                    /** Verificamos la conexion en caso de que el cliente se conecte y se desconecte de
-                     * manera inesperada
-                     */
-                    if (VerificarConexion())
-                    {
-                        return true;
-                    }
                 }
             }
             //Manejo de errores
@@ -44,27 +39,28 @@ namespace Unidad1TCPClient.Services
             {
                 MessageBox.Show(ex.Message);
             }
-            return false;
+            return client.Connected;
         }
         public bool Desconectar()
         {
+            //Intentara desconectar el servidor
             try
             {
                 client.Close();
-                return true;
             }
             //Manejo de errores
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-            return false;
+            //Si el cliente no esta conectado regresara true, en caso contrario regresara false
+            return !client.Connected;
         }
         public bool CompartirImagen(string rutaImagen,IPAddress ip,int puerto)
         {
             try
             {
-                if (VerificarConexion())
+                if (client.Connected)
                 {
                     if (File.Exists(rutaImagen))
                     {
@@ -72,8 +68,6 @@ namespace Unidad1TCPClient.Services
                         byte[] imageBytes = File.ReadAllBytes(rutaImagen);
                         // Convertimos los bytes de la imagen recibida a base 64
                         string base64String = Convert.ToBase64String(imageBytes);
-                        // Establecer conexión TCP con el servidor
-                        Conectar(ip,puerto);
                         EnviarImagen(base64String);
                         //si todo fue bien
                         return true;
@@ -92,7 +86,7 @@ namespace Unidad1TCPClient.Services
         {
             try
             {
-                if (VerificarConexion())
+                if (client.Connected)
                 {
                     var BytesImagen = File.ReadAllBytes(Imagen);
                     string base64String = Convert.ToBase64String(BytesImagen);
@@ -112,6 +106,11 @@ namespace Unidad1TCPClient.Services
             }
         }
         #region Metodos Necesarios
+        public void CrearClienteTCP()
+        {
+            client ??= new();
+        }
+
         private void EnviarImagen(string base64String)
         {
             try
@@ -130,10 +129,6 @@ namespace Unidad1TCPClient.Services
             {
                 MessageBox.Show(ex.Message);
             }
-        }
-        bool VerificarConexion()
-        {
-            return client.Connected;
         }
         #endregion
     }
