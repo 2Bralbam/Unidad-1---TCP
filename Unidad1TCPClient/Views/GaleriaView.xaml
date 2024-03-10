@@ -34,7 +34,7 @@
                         <Style TargetType="TextBlock">
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding}" Value="No hay Imagen">
+                                <DataTrigger Binding="{Binding Imagen}" Value="No hay Imagen">
                                     <Setter Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -55,7 +55,45 @@
                 <Button Content="Seleccionar Foto" Command="{Binding SeleccionarFotoCommand}"/>
             </Border>
             <Border>
-                <Button Content="Compartir Foto" Command="{Binding CompartirFotoCommand}"/>
+                <Border.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="Background" Value="CadetBlue"/>
+                        <Setter Property="Margin" Value="10,5"/>
+                        <Setter Property="Height" Value="40"/>
+                        <Setter Property="Width" Value="170"/>
+                        <Setter Property="BorderBrush" Value="White"/>
+                        <Setter Property="BorderThickness" Value="2"/>
+                        <Setter Property="CornerRadius" Value="7"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Imagen}" Value="No hay Imagen">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Resources>
+                <Button Content="Compartir Foto" Command="{Binding CompartirFotoCommand}">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="Background" Value="CadetBlue"/>
+                            <Setter Property="Margin" Value="0"/>
+                            <Setter Property="Height" Value="40"/>
+                            <Setter Property="Width" Value="170"/>
+                            <Setter Property="BorderBrush" Value="White"/>
+                            <Setter Property="BorderThickness" Value="2"/>
+                            <Setter Property="CornerRadius" Value="7"/>
+                            
+                            <Setter Property="IsEnabled" Value="True"/>
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Imagen}" Value="No hay Imagen">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Resources>
+                </Button>
             </Border>
             <Border>
                 <Border.Resources>
@@ -67,7 +105,7 @@
                         <Setter Property="BorderBrush" Value="White"/>
                         <Setter Property="BorderThickness" Value="2"/>
                         <Setter Property="CornerRadius" Value="7"/>
-                        
+
                         <Setter Property="IsEnabled" Value="True"/>
                         <Setter Property="Visibility" Value="Visible"/>
                         <Style.Triggers>
@@ -78,7 +116,6 @@
                         </Style.Triggers>
                     </Style>
                 </Border.Resources>
-
                 <Button Content="Eliminar Foto" BorderThickness="0" Background="Transparent" Foreground="White" Command="{Binding EliminarFotoCommand}">
                     <Button.Resources>
                         <Style TargetType="Button">

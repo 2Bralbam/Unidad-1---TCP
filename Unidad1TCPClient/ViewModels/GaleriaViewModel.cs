@@ -109,11 +109,12 @@ namespace Unidad1TCPClient.ViewModels
                 //Agrega la imagen a la lista local
                 ListaImagenes.Add(Imagen);
                 GuardarLista();
+                Imagen = "No hay Imagen";
                 OnPropertyChanged();
             }
             else
             {
-                MessageBox.Show("La imagen no se ah compartido");
+                MessageBox.Show("Seleccione una imagen para compartir");
             }
         }
         private void SeleccionarFoto()
@@ -147,7 +148,6 @@ namespace Unidad1TCPClient.ViewModels
                 // Eliminar en servidor
                 // Limpiar la imagen seleccionada
                 ImagenSeleccionada = "nada";
-
                 OnPropertyChanged(nameof(ListaImagenes));
                 OnPropertyChanged(nameof(ImagenSeleccionada));
             }
