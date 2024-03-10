@@ -22,7 +22,6 @@ namespace Unidad1TCPClient.ViewModels
         #endregion
         #region Listas
         public ObservableCollection<string> ListaImagenes { get; set; } = new();
-
         private string imagenSeleccionada = "nada";
         public string ImagenSeleccionada {
             get
@@ -53,7 +52,6 @@ namespace Unidad1TCPClient.ViewModels
             EliminarFotoCommand = new RelayCommand(EliminarFoto);
             CargarLista();
         }
-
         #region Metodos Listas
         private void CargarLista()
         {
@@ -117,7 +115,6 @@ namespace Unidad1TCPClient.ViewModels
                 OnPropertyChanged();
             }
         }
-
         private void SeleccionarFoto()
         {
             //Mostrar ventana para seleccionar la foto/imagen/mapa de bits/etc...
@@ -181,7 +178,6 @@ namespace Unidad1TCPClient.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(Propertyname));
         }
-
         public event PropertyChangedEventHandler? PropertyChanged;
         #endregion
     }
