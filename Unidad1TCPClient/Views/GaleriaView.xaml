@@ -81,23 +81,8 @@
                 <DataTemplate>
                     <Border>
                         <StackPanel>
-                            <Image Source="{Binding StringFormat={}}" Width="180" Height="180" Margin="7"/>
-
-                            <Button BorderThickness="0"
-                                    Foreground="White"
-                                    Padding="10"
-                                    FontWeight="Bold" FontSize="14"
-                                    Command="{Binding EliminarFotoCommand}"
-                                    Content="Eliminar"
-                            />
-
-                            <TextBlock Text="{Binding ImagenSeleccionada}" 
-                                       Foreground="White" 
-                                       FontSize="14" 
-                                       FontWeight="Bold" 
-                                       TextWrapping="Wrap" 
-                                       Width="150"
-                            />
+                            <Image Source="{Binding}" Width="180" Height="180" Margin="7"/>
+                            <Button Content="Eliminar Foto" Command="{Binding EliminarFotoCommand}" CommandParameter="{Binding .}"/>
                         </StackPanel>
                     </Border>
                 </DataTemplate>

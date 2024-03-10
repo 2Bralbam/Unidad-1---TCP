@@ -1,18 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using Unidad1TCPClient.Services;
 
 namespace Unidad1TCPClient.ViewModels
@@ -29,8 +22,8 @@ namespace Unidad1TCPClient.ViewModels
         #region Listas
         public ObservableCollection<string> ListaImagenes { get; set; } = new()
         {
-            @"C:\UsersLuisR\OneDrive\Imágenes\Bluestack\Screenshot_2024.02.21_22.27.23.201.png",
-            @"C:\UsersLuisR\OneDrive\Imágenes\Bluestack\Screenshot_2024.03.05_01.41.33.361.png"
+            "C:\\Users\\LuisR\\OneDrive\\Imágenes\\Bluestack\\Screenshot_2024.02.21_22.27.23.201.png",
+            "C:\\Users\\LuisR\\OneDrive\\Imágenes\\Bluestack\\Screenshot_2024.03.05_01.41.33.361.png"
         };
         public string? ImagenSeleccionada { get; set; }
 
@@ -142,7 +135,6 @@ namespace Unidad1TCPClient.ViewModels
         {
             if (!string.IsNullOrEmpty(ImagenSeleccionada))
             {
-
                 GaleriaService.EliminarImagen(ImagenSeleccionada, IPAddress.Parse(IP), Puerto);
                 // Eliminar localmente
                 ListaImagenes.Remove(ImagenSeleccionada);
