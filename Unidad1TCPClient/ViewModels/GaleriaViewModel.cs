@@ -13,9 +13,9 @@ namespace Unidad1TCPClient.ViewModels
     public class GaleriaViewModel : INotifyPropertyChanged
     {
         #region Variables
-        public bool Conectado { get; set; } = true;
+        public bool Conectado { get; set; } = false;
         public string IP { get; set; } = "127.0.0.1";
-        public int Puerto { get; set; } = 55555;
+        public int Puerto { get; set; } = 9000;
         protected GaleriaService GaleriaService { get; set; } = new();
         public string Imagen { get; set; } = "No hay Imagen";
         #endregion
@@ -160,7 +160,6 @@ namespace Unidad1TCPClient.ViewModels
         }
         private void ConectarServer()
         {
-            
             if (GaleriaService.Conectar(IPAddress.Parse(IP), Puerto))
             {
                 /** Si la conexion fue exitosa mostrara un mensaje y cambiara la vista
