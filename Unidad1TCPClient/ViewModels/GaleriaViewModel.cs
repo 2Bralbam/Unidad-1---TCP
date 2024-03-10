@@ -111,15 +111,13 @@ namespace Unidad1TCPClient.ViewModels
                 MessageBox.Show("La imagen se ah compartido");
                 //Agrega la imagen a la lista local
                 ListaImagenes.Add(Imagen);
-                GuardarLista();
+                // Limpiar la imagen compartida
                 Imagen = "No hay Imagen";
+                GuardarLista();
                 OnPropertyChanged();
             }
-            else
-            {
-                MessageBox.Show("Seleccione una imagen para compartir");
-            }
         }
+
         private void SeleccionarFoto()
         {
             //Mostrar ventana para seleccionar la foto/imagen/mapa de bits/etc...
@@ -145,14 +143,14 @@ namespace Unidad1TCPClient.ViewModels
         {
             if (!string.IsNullOrEmpty(ImagenSeleccionada))
             {
-                GaleriaService.EliminarImagen(ImagenSeleccionada, IPAddress.Parse(IP), Puerto);
+                // Eliminar en servidor
+                GaleriaService.EliminarImagen(ImagenSeleccionada);
                 // Eliminar localmente
                 ListaImagenes.Remove(ImagenSeleccionada);
-                // Eliminar en servidor
                 // Limpiar la imagen seleccionada
                 ImagenSeleccionada = "nada";
-                OnPropertyChanged(nameof(ListaImagenes));
-                OnPropertyChanged(nameof(ImagenSeleccionada));
+
+                OnPropertyChanged();
             }
             GuardarLista();
         }

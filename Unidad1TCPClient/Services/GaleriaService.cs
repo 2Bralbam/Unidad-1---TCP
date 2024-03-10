@@ -103,7 +103,7 @@ namespace Unidad1TCPClient.Services
             //si no se logro compartir la imagen regresara un false
             return false;
         }
-        public void EliminarImagen(string Imagen, IPAddress ip, int puerto)
+        public void EliminarImagen(string Imagen)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace Unidad1TCPClient.Services
                      *  al deserealizar el texto, mostrara la accion que se desea realizar (eliminar) y la imagen que
                      *  se eliminara (en este caso)
                      */
-                    byte[] data = Encoding.UTF8.GetBytes("eliminar " + base64String);
+                    byte[] data = Encoding.UTF8.GetBytes("**Eliminar " + base64String);
                     stream.Write(data, 0, data.Length);
                 }
             }
@@ -150,6 +150,7 @@ namespace Unidad1TCPClient.Services
                 MessageBox.Show(ex.Message);
             }
         }
+
         public void EnviarMensaje(MensajeDTO m)
         {
             if (!string.IsNullOrWhiteSpace(m.Usuario))
