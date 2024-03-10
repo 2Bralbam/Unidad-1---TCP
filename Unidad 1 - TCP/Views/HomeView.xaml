@@ -3,10 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Unidad_1___TCP.Views" xmlns:vm="clr-namespace:Unidad_1___TCP.ViewModels"
+        xmlns:local="clr-namespace:Unidad_1___TCP.Views" 
+        xmlns:vm="clr-namespace:Unidad_1___TCP.ViewModels"
         mc:Ignorable="d"
         ResizeMode="NoResize"
         Title="HomeView" Height="450" Width="800">
+    <Window.DataContext>
+        <vm:HomeViewModel></vm:HomeViewModel>
+    </Window.DataContext>
     <Window.Resources>
         <Style TargetType="DockPanel">
             <Setter Property="Background" Value="#1b1e23"/>
@@ -37,13 +41,24 @@
     </Window.Resources>
     <DockPanel>
         <StackPanel Width="103">
-            <TextBlock TextWrapping="Wrap" Width="100">Evento: Cumpleaños</TextBlock>
+            <TextBlock TextWrapping="Wrap" Width="100" Text="{Binding EventoTipo}"></TextBlock>
             <Label HorizontalAlignment="Center">Servidor</Label>
-            <Ellipse Height="20" Width="20" Fill="Red">
-
+            <Ellipse Height="20" Width="20">
+                <Ellipse.Style>
+                    <Style TargetType="Ellipse">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=ServidorCorriendo}" Value="True">
+                                <Setter Property="Fill" Value="Green"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=ServidorCorriendo}" Value="False">
+                                <Setter Property="Fill" Value="Red"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Ellipse.Style>
             </Ellipse>
-            <Label HorizontalAlignment="center">IP: 127.0.0.1</Label>
-            <Button Margin="10">
+            <Label HorizontalAlignment="center" Content="{Binding IP}"></Label>
+            <Button Margin="10" Command="{Binding IniciarServer}">
                 Iniciar
                 <Button.Resources>
                     <Style TargetType="Border">
@@ -51,7 +66,7 @@
                     </Style>
                 </Button.Resources>
             </Button>
-            <Button Margin="10 0">
+            <Button Margin="10 0" Command="{Binding DetenerServer}">
                 Detener
                 <Button.Resources>
                     <Style TargetType="Border">
@@ -61,13 +76,13 @@
             </Button>
             <StackPanel Height="267" Width="104">
                 <Label HorizontalAlignment="center">Usuarios Online</Label>
-                <ListBox Height="250">
+                <ListBox Height="250" ItemsSource="{Binding Usuarios}">
 
                 </ListBox>
             </StackPanel>
         </StackPanel>
         <DockPanel ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-            <ListBox ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Publicaciones}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Width="682">

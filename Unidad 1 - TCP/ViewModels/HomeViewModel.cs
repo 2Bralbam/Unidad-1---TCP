@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -17,7 +18,20 @@ namespace Unidad_1___TCP.ViewModels
     {
         TCPServer server = new TCPServer();
         public ObservableCollection<string> Usuarios { get; set; } = new();
-        ObservableCollection<Publicacion> Publicaciones = new();
+        public ObservableCollection<Publicacion> Publicaciones = new();
+        public string EventoTipo { get; set; } = "Evento";
+        public bool ServidorCorriendo { 
+            get
+            {
+                return _serverActivo;
+            }
+            set
+            {
+                _serverActivo = value;
+                OnPropertyChanged();
+            }
+        }
+        private bool _serverActivo { get; set; }
         public ICommand IniciarServer { get; set; }
         public ICommand DetenerServer { get; set; }
         public static string IP
@@ -41,12 +55,17 @@ namespace Unidad_1___TCP.ViewModels
             server.MensajeRecibido += RecibiendoMensaje;
             IniciarServer = new RelayCommand(() =>
             {
-                server.IniciarServer();
+                if (!server.ServerActivo)
+                {
+                    server.IniciarServer();
+                    CheckServerStatus();
+                }
+                
             });
             DetenerServer = new RelayCommand(() =>
             {
                 server.DetenerServer();
-                Usuarios.Clear();
+                CheckServerStatus();
             });
         }
 
@@ -86,6 +105,24 @@ namespace Unidad_1___TCP.ViewModels
                 Usuarios.Add(e.Usuario);
             }
 
+        }
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        void CheckServerStatus()
+        {
+            if(server.ServerActivo)
+            {
+                ServidorCorriendo = true;
+                
+            }
+            else
+            {
+               
+                ServidorCorriendo = false;
+                Usuarios.Clear();
+            }
         }
     }
 }

@@ -15,12 +15,13 @@ namespace Unidad_1___TCP.Services
     {
         TcpListener server = null!;
         List<TcpClient> Clientes = new();
-        public bool ServerActivo = false;
+        public bool ServerActivo { get; set; }
         public event EventHandler<MensajeDTO>? MensajeRecibido;
         public void IniciarServer()
         {
             server = new(new IPEndPoint(IPAddress.Any, 9000));
             server.Start();
+            ServerActivo = true;
             new Thread(Escuchar) { IsBackground = true }.Start();
         }
         void Escuchar()
