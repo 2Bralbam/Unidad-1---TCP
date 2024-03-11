@@ -88,25 +88,16 @@ namespace Unidad1TCPClient.Services
                     {
                         //serializamos la foto
                         //string json = JsonConvert.SerializeObject(dto.Foto);
-                        byte[]? FotoBase64 = SerializarFoto(dto.Foto);
+                        byte[] FotoBase64 = SerializarFoto(dto.Foto);
                         // obtenemos los bytes de la imagen seleccionada
                         //byte[] imageBytes = File.ReadAllBytes(json);
                         // Convertimos los bytes de la imagen recibida a base 64
-                        if(FotoBase64 != null)
+                        if(FotoBase64 != null && FotoBase64.Length > 0)
                         {
-                            if(FotoBase64.Length > 0)
-                            {
-                                string base64String = FotoBase64.ToString();
+                                string? base64String = FotoBase64.ToString();
                                 EnviarImagen(base64String);
                                 //si todo fue bien
                                 return true;
-
-                            }
-                            else
-                            {
-                                return false;
-                            }
-
                         }
                         else
                         {
@@ -123,18 +114,10 @@ namespace Unidad1TCPClient.Services
             //si no se logro compartir la imagen regresara un false
             return false;
         }
-        byte[]? SerializarFoto(string PathFoto)
+        private static byte[] SerializarFoto(string PathFoto)
         {
-            try
-            {
-                byte[] imageBytes = File.ReadAllBytes(PathFoto);
-                return imageBytes;
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return null;
-            }
+            byte[] imageBytes = File.ReadAllBytes(PathFoto);
+            return imageBytes;
         }
         public void EliminarImagen(MensajeDTO dto)
         {
@@ -172,18 +155,22 @@ namespace Unidad1TCPClient.Services
         {
             client ??= new();
         }
-        private void EnviarImagen(string base64String)
+        private void EnviarImagen(string? base64String)
         {
             try
             {
-                NetworkStream stream = client.GetStream();
-                // Enviar la imagen codificada al servidor
-                byte[] data = Encoding.UTF8.GetBytes(base64String);
-                stream.Write(data, 0, data.Length);
-                /** El stream se queda abierto en caso de que se quiera mandar mas informacion,
-                 *  en este caso las imagenes ya que se esta utilizando una conexion por el 
-                 *  protocolo TCP no es necesario cerrar la conexion
-                 */
+                if (!string.IsNullOrWhiteSpace(base64String))
+                {
+                    NetworkStream stream = client.GetStream();
+                    // Enviar la imagen codificada al servidor
+
+                    byte[] data = Encoding.UTF8.GetBytes(base64String);
+                    stream.Write(data, 0, data.Length);
+                    /** El stream se queda abierto en caso de que se quiera mandar mas informacion,
+                     *  en este caso las imagenes ya que se esta utilizando una conexion por el 
+                     *  protocolo TCP no es necesario cerrar la conexion
+                     */
+                }
             }
             //Manejo de errores
             catch (Exception ex)
