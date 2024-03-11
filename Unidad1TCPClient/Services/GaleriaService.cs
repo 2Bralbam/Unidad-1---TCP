@@ -87,7 +87,7 @@ namespace Unidad1TCPClient.Services
                     if (File.Exists(dto.Foto))
                     {
                         //serializamos la foto
-                        string json = JsonConvert.SerializeObject(dto);
+                        string json = JsonConvert.SerializeObject(dto.Foto);
                         // obtenemos los bytes de la imagen seleccionada
                         byte[] imageBytes = File.ReadAllBytes(json);
                         // Convertimos los bytes de la imagen recibida a base 64
