@@ -13,10 +13,10 @@
     </Window.DataContext>
     <Window.Resources>
         <Style TargetType="DockPanel">
-            <Setter Property="Background" Value="#1b1e23"/>
+            <Setter Property="Background" Value="CadetBlue"/>
         </Style>
         <Style TargetType="ListBox">
-            <Setter Property="Background" Value="#1b1e23"/>
+            <Setter Property="Background" Value="CadetBlue"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="BorderBrush" Value="Gray"/>
         </Style>

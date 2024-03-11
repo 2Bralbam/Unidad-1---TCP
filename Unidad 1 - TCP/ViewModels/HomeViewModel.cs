@@ -78,11 +78,11 @@ namespace Unidad_1___TCP.ViewModels
                 Mensaje = e,
                 Comentarios = new() 
             };
-            if(e.Foto == "**HELLO")
+            if(e.Mensaje == "**HELLO")
             {
                 Usuarios.Add(e.Usuario);
             }
-            else if(e.Foto == "**BYE")
+            else if(e.Mensaje == "**BYE")
             {
                 Usuarios.Remove(e.Usuario);
             }
