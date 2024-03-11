@@ -86,35 +86,15 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Width="682">
-                            <TextBlock HorizontalAlignment="Left">29 Febrero 2024</TextBlock>
+                            <TextBlock HorizontalAlignment="Left" Text="{Binding Mensaje.Fecha}"></TextBlock>
 
                             <Grid>
-                                <TextBlock Margin="200 0">Bryan Alexis Bautista Muñoz</TextBlock>
-                                <TextBlock Margin="200 20" Height="50" TextWrapping="Wrap" >
-<!--MAXIMO 255 Caracteres-->
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniamaaaa
-
+                                <TextBlock Margin="200 0" Text="{Binding Mensaje.Usuario}"></TextBlock>
+                                <TextBlock Margin="200 20" Height="50" TextWrapping="Wrap" Text="{Binding Mensaje.Mensaje}">
                                 </TextBlock>
                             </Grid>
-                            <Image Height="250" Width="250"></Image>
-                            <Grid>
-                                <Button Height="20" Margin="260,8,372,0">
-                                    Like
-                                    <Button.Resources>
-                                        <Style TargetType="Border">
-                                            <Setter Property="CornerRadius" Value="5"/>
-                                        </Style>
-                                    </Button.Resources>
-                                </Button>
-                                <Button Height="20" Margin="353,8,279,0">
-                                    Dislike
-                                    <Button.Resources>
-                                        <Style TargetType="Border">
-                                            <Setter Property="CornerRadius" Value="5"/>
-                                        </Style>
-                                    </Button.Resources>
-                                </Button>
-                            </Grid>
+                            <Image Height="250" Width="250" Source="{Binding FotoSrc}"></Image>
+                            
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

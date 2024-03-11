@@ -58,7 +58,7 @@ namespace Unidad_1___TCP.Services
                     MensajeDTO? mensajeDTO = JsonSerializer.Deserialize<MensajeDTO>(mensaje);
                     if (mensajeDTO != null)
                     {
-                        if(mensajeDTO.Foto == "**BYE")
+                        if(mensajeDTO.Mensaje == "**BYE")
                         {
                             Cliente.Close();
                             Clientes.Remove(Cliente);
@@ -70,7 +70,7 @@ namespace Unidad_1___TCP.Services
                         }
                         else
                         {
-                            RebotarMensaje(buffer, Cliente);
+                            //RebotarMensaje(buffer, Cliente);
                             Application.Current.Dispatcher.Invoke(() =>
                             {
                                 MensajeRecibido?.Invoke(this, mensajeDTO);
