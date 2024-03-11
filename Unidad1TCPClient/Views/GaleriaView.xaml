@@ -72,7 +72,7 @@
                         </Style.Triggers>
                     </Style>
                 </Border.Resources>
-                <Button Content="Eliminar Foto" Margin="10,5" BorderThickness="0" Background="Transparent" Foreground="White" Command="{Binding EliminarFotoCommand}">
+                <Button Content="Eliminar Foto" Margin="0" BorderThickness="0" Background="Transparent" Foreground="White" Command="{Binding EliminarFotoCommand}">
                     <Button.Resources>
                         <Style TargetType="Button">
                             <Setter Property="IsEnabled" Value="True"/>
@@ -89,7 +89,6 @@
                 <Button Content="Desconectar Servidor" Command="{Binding DesconectarCommand}"/>
             </Border>
             <TextBlock Text="Vista Previa de la Imagen seleccionada:" Foreground="White" FontSize="14" FontWeight="Bold" TextWrapping="Wrap" Width="150"/>
-
             <Border Width="200" Height="200">
                 <StackPanel>
                     <StackPanel.Resources>
@@ -133,11 +132,7 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Border>
-                                <StackPanel Margin="5">
-                                    <Border CornerRadius="7">
-                                        <Image Source="{Binding}" Width="100" Height="100" Margin="5"/>
-                                    </Border>
-                                </StackPanel>
+                                <Image Source="{Binding}" Width="200" Height="200" Margin="5"/>
                             </Border>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
