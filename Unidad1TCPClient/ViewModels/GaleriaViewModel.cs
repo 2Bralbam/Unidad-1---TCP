@@ -108,13 +108,12 @@ namespace Unidad1TCPClient.ViewModels
             {
                 Fecha = DateTime.Now,
                 Foto = Imagen,
+                Mensaje = "**SHARE",
                 Usuario = GaleriaService.Equipo
             };
-
             //Agregar la imagen al servidor
             if (GaleriaService.CompartirImagen(Datos))
             {
-                MessageBox.Show("La imagen se ah compartido");
                 //Agrega la imagen a la lista local
                 ListaImagenes.Add(Imagen);
                 // Limpiar la imagen compartida
@@ -150,18 +149,20 @@ namespace Unidad1TCPClient.ViewModels
             {
                 MensajeDTO mensaje = new()
                 {
-                    Fecha = DateTime.Now,
+                    Mensaje = "**DELETE",
                     Foto = ImagenSeleccionada,
                     Usuario = Dns.GetHostName()
                 };
                 // Eliminar en servidor
-                GaleriaService.EliminarImagen(mensaje);
-                // Eliminar localmente
-                ListaImagenes.Remove(ImagenSeleccionada);
-                // Limpiar la imagen seleccionada
-                ImagenSeleccionada = "nada";
-                GuardarLista();
-                OnPropertyChanged();
+                if (GaleriaService.EliminarImagen(mensaje))
+                {
+                    // Eliminar localmente
+                    ListaImagenes.Remove(ImagenSeleccionada);
+                    // Limpiar la imagen seleccionada
+                    ImagenSeleccionada = "nada";
+                    GuardarLista();
+                    OnPropertyChanged();
+                }
             }
         }
         #endregion

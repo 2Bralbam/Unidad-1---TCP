@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.Messaging.Messages;
 using Unidad1TCPClient.Models;
 using System.Text.Json;
 using Newtonsoft.Json;
+using DevExpress.Data.Helpers;
 
 namespace Unidad1TCPClient.Services
 {
@@ -40,8 +41,8 @@ namespace Unidad1TCPClient.Services
                     //Mensaje Hello
                     var msg = new MensajeDTO
                     {
+                        Mensaje = "**HELLO",
                         Fecha = DateTime.Now,
-                        Foto = "**HELLO",
                         Usuario = Equipo
                     };
                     EnviarMensaje(msg);
@@ -63,8 +64,8 @@ namespace Unidad1TCPClient.Services
                 //Mensaje bye
                 var msg = new MensajeDTO
                 {
+                    Mensaje = "**BYE",
                     Fecha = DateTime.Now,
-                    Foto = "**BYE",
                     Usuario = Equipo
                 };
                 EnviarMensaje(msg);
@@ -86,62 +87,31 @@ namespace Unidad1TCPClient.Services
                 {
                     if (File.Exists(dto.Foto))
                     {
-                        //serializamos la foto
-                        //string json = JsonConvert.SerializeObject(dto.Foto);
-                        byte[] FotoBase64 = SerializarFoto(dto.Foto);
-                        // obtenemos los bytes de la imagen seleccionada
-                        //byte[] imageBytes = File.ReadAllBytes(json);
-                        // Convertimos los bytes de la imagen recibida a base 64
-                        if(FotoBase64.Length > 0)
-                        {
-                                string? base64String = FotoBase64.ToString();
-                                EnviarImagen(base64String);
-                                //si todo fue bien
-                                return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
+                        dto.Foto = ConvertirABase64(dto.Foto);
+                        EnviarMensaje(dto);
+                        return true;
                     }
                 }
             }
-            //Manejo de errores
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-            //si no se logro compartir la imagen regresara un false
             return false;
-        }
-        private static byte[] SerializarFoto(string PathFoto)
+        }       
+        private static string ConvertirABase64(string imagen)
         {
-            byte[] imageBytes = File.ReadAllBytes(PathFoto);
-            return imageBytes;
+            return Convert.ToBase64String(File.ReadAllBytes(imagen));
         }
-        public void EliminarImagen(MensajeDTO dto)
+        public bool EliminarImagen(MensajeDTO dto)
         {
             try
             {
                 if (client.Connected)
                 {
-                    //Serializamos el objeto
-                    var json = JsonConvert.SerializeObject(dto);
-                    //Obtenemos los Bytes
-                    var BytesImagen = File.ReadAllBytes(json);
-                    //Convertimos a base64
-                    string base64String = Convert.ToBase64String(BytesImagen);
-                    //Obtenemos la red
-                    NetworkStream stream = client.GetStream();
-
-                    /** Se debe identificar de alguna manera que metodo se utilizara al recibir la imagen,
-                     *  al deserealizar el texto, mostrara la accion que se desea realizar (eliminar) y la imagen que
-                     *  se eliminara (en este caso) 
-                     *  al serializar se puede utilizar un substring para obtener la data saltando el mensaje **Eliminar
-                     */
-                    byte[] data = Encoding.UTF8.GetBytes("**Eliminar " + base64String);
-                    //Enviamos los datos
-                    stream.Write(data, 0, data.Length);
+                    dto.Foto = ConvertirABase64(dto.Foto);
+                    EnviarMensaje(dto);
+                    return true;
                 }
             }
             //Manejo de errores
@@ -149,34 +119,12 @@ namespace Unidad1TCPClient.Services
             {
                 MessageBox.Show(ex.Message);
             }
+            return false;
         }
         #region Metodos Necesarios
         public void CrearClienteTCP()
         {
             client ??= new();
-        }
-        private void EnviarImagen(string? base64String)
-        {
-            try
-            {
-                if (!string.IsNullOrWhiteSpace(base64String))
-                {
-                    NetworkStream stream = client.GetStream();
-                    // Enviar la imagen codificada al servidor
-
-                    byte[] data = Encoding.UTF8.GetBytes(base64String);
-                    stream.Write(data, 0, data.Length);
-                    /** El stream se queda abierto en caso de que se quiera mandar mas informacion,
-                     *  en este caso las imagenes ya que se esta utilizando una conexion por el 
-                     *  protocolo TCP no es necesario cerrar la conexion
-                     */
-                }
-            }
-            //Manejo de errores
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
         }
         public void EnviarMensaje(MensajeDTO m)
         {

@@ -8,8 +8,9 @@ namespace Unidad1TCPClient.Models
 {
     public class MensajeDTO
     {
+        public string Mensaje { get; set; } = null!;
         public string Usuario { get; set; } = null!;
-        public string Foto { get; set; } = "nada";
+        public string Foto { get; set; } = null!;
         public DateTime Fecha { get; set; }
     }
 }
