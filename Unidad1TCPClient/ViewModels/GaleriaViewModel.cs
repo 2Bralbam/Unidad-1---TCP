@@ -160,10 +160,9 @@ namespace Unidad1TCPClient.ViewModels
                 ListaImagenes.Remove(ImagenSeleccionada);
                 // Limpiar la imagen seleccionada
                 ImagenSeleccionada = "nada";
-
+                GuardarLista();
                 OnPropertyChanged();
             }
-            GuardarLista();
         }
         #endregion
         #region Servidor
