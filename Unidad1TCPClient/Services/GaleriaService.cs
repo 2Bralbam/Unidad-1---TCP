@@ -8,6 +8,7 @@ using System.Text;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using Unidad1TCPClient.Models;
 using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace Unidad1TCPClient.Services
 {
@@ -19,7 +20,7 @@ namespace Unidad1TCPClient.Services
            la conexion 
         */
         private TcpClient client = new();
-        public string equipo { get; set; } = "";
+        public string Equipo { get; set; } = "";
         // Ya que quiero saber desde el viewmodel si el cliente se conecto correctamente utilizo un booleano
         public bool Conectar(IPAddress ip,int puerto)
         {
@@ -32,7 +33,7 @@ namespace Unidad1TCPClient.Services
                 if (!client.Connected)
                 {
                     IPEndPoint ipe = new(ip, puerto);
-                    equipo = Dns.GetHostName();
+                    Equipo = Dns.GetHostName();
                    
                     client.Connect(ipe);
 
@@ -41,7 +42,7 @@ namespace Unidad1TCPClient.Services
                     {
                         Fecha = DateTime.Now,
                         Foto = "**HELLO",
-                        Usuario = equipo
+                        Usuario = Equipo
                     };
                     EnviarMensaje(msg);
                     // El cliente no recibe respuesta nunca asi que no es necesario implmentar un metodo para recibir respuesta
@@ -64,7 +65,7 @@ namespace Unidad1TCPClient.Services
                 {
                     Fecha = DateTime.Now,
                     Foto = "**BYE",
-                    Usuario = equipo
+                    Usuario = Equipo
                 };
                 EnviarMensaje(msg);
                 client.Close();
@@ -77,16 +78,18 @@ namespace Unidad1TCPClient.Services
             //Si el cliente no esta conectado regresara true, en caso contrario regresara false
             return !client.Connected;
         }
-        public bool CompartirImagen(string rutaImagen)
+        public bool CompartirImagen(MensajeDTO dto)
         {
             try
             {
                 if (client.Connected)
                 {
-                    if (File.Exists(rutaImagen))
+                    if (File.Exists(dto.Foto))
                     {
+                        //serializamos la foto
+                        string json = JsonConvert.SerializeObject(dto);
                         // obtenemos los bytes de la imagen seleccionada
-                        byte[] imageBytes = File.ReadAllBytes(rutaImagen);
+                        byte[] imageBytes = File.ReadAllBytes(json);
                         // Convertimos los bytes de la imagen recibida a base 64
                         string base64String = Convert.ToBase64String(imageBytes);
                         EnviarImagen(base64String);
@@ -103,20 +106,28 @@ namespace Unidad1TCPClient.Services
             //si no se logro compartir la imagen regresara un false
             return false;
         }
-        public void EliminarImagen(string Imagen)
+        public void EliminarImagen(MensajeDTO dto)
         {
             try
             {
                 if (client.Connected)
                 {
-                    var BytesImagen = File.ReadAllBytes(Imagen);
+                    //Serializamos el objeto
+                    var json = JsonConvert.SerializeObject(dto);
+                    //Obtenemos los Bytes
+                    var BytesImagen = File.ReadAllBytes(json);
+                    //Convertimos a base64
                     string base64String = Convert.ToBase64String(BytesImagen);
+                    //Obtenemos la red
                     NetworkStream stream = client.GetStream();
+
                     /** Se debe identificar de alguna manera que metodo se utilizara al recibir la imagen,
                      *  al deserealizar el texto, mostrara la accion que se desea realizar (eliminar) y la imagen que
-                     *  se eliminara (en este caso)
+                     *  se eliminara (en este caso) 
+                     *  al serializar se puede utilizar un substring para obtener la data saltando el mensaje **Eliminar
                      */
                     byte[] data = Encoding.UTF8.GetBytes("**Eliminar " + base64String);
+                    //Enviamos los datos
                     stream.Write(data, 0, data.Length);
                 }
             }
@@ -150,12 +161,11 @@ namespace Unidad1TCPClient.Services
                 MessageBox.Show(ex.Message);
             }
         }
-
         public void EnviarMensaje(MensajeDTO m)
         {
-            if (!string.IsNullOrWhiteSpace(m.Usuario))
+            if (m!=null && !string.IsNullOrWhiteSpace(m.Usuario))
             {
-                var json = JsonSerializer.Serialize(m);
+                var json = System.Text.Json.JsonSerializer.Serialize(m);
                 byte[] buffer = Encoding.UTF8.GetBytes(json);
                 var ns = client.GetStream();
                 ns.Write(buffer, 0, buffer.Length);

@@ -103,8 +103,16 @@ namespace Unidad1TCPClient.ViewModels
         #region Fotos
         private void CompartirFoto()
         {
+            //Creamos un dto con la fecha, la imagen y el nombre del equipo
+            var Datos = new MensajeDTO()
+            {
+                Fecha = DateTime.Now,
+                Foto = Imagen,
+                Usuario = GaleriaService.Equipo
+            };
+
             //Agregar la imagen al servidor
-            if (GaleriaService.CompartirImagen(Imagen))
+            if (GaleriaService.CompartirImagen(Datos))
             {
                 MessageBox.Show("La imagen se ah compartido");
                 //Agrega la imagen a la lista local
