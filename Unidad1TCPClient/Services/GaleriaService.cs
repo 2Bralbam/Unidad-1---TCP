@@ -87,14 +87,31 @@ namespace Unidad1TCPClient.Services
                     if (File.Exists(dto.Foto))
                     {
                         //serializamos la foto
-                        string json = JsonConvert.SerializeObject(dto.Foto);
+                        //string json = JsonConvert.SerializeObject(dto.Foto);
+                        byte[]? FotoBase64 = SerializarFoto(dto.Foto);
                         // obtenemos los bytes de la imagen seleccionada
-                        byte[] imageBytes = File.ReadAllBytes(json);
+                        //byte[] imageBytes = File.ReadAllBytes(json);
                         // Convertimos los bytes de la imagen recibida a base 64
-                        string base64String = Convert.ToBase64String(imageBytes);
-                        EnviarImagen(base64String);
-                        //si todo fue bien
-                        return true;
+                        if(FotoBase64 != null)
+                        {
+                            if(FotoBase64.Length > 0)
+                            {
+                                string base64String = FotoBase64.ToString();
+                                EnviarImagen(base64String);
+                                //si todo fue bien
+                                return true;
+
+                            }
+                            else
+                            {
+                                return false;
+                            }
+
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
                 }
             }
@@ -105,6 +122,19 @@ namespace Unidad1TCPClient.Services
             }
             //si no se logro compartir la imagen regresara un false
             return false;
+        }
+        byte[]? SerializarFoto(string PathFoto)
+        {
+            try
+            {
+                byte[] imageBytes = File.ReadAllBytes(PathFoto);
+                return imageBytes;
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
+            }
         }
         public void EliminarImagen(MensajeDTO dto)
         {
