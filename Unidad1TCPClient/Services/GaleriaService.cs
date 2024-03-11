@@ -92,7 +92,7 @@ namespace Unidad1TCPClient.Services
                         // obtenemos los bytes de la imagen seleccionada
                         //byte[] imageBytes = File.ReadAllBytes(json);
                         // Convertimos los bytes de la imagen recibida a base 64
-                        if(FotoBase64 != null && FotoBase64.Length > 0)
+                        if(FotoBase64.Length > 0)
                         {
                                 string? base64String = FotoBase64.ToString();
                                 EnviarImagen(base64String);
