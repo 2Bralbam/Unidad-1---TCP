@@ -78,31 +78,13 @@ namespace Unidad_1___TCP.ViewModels
                 Mensaje = e,
                 Comentarios = new() 
             };
-            P.IdPublicacion = Publicaciones.Max(x=>x.IdPublicacion) +1;
-            bool IdRepetido = true;
-            while (IdRepetido)
-            {
-                IdRepetido = Publicaciones.Any(x => x.IdPublicacion == P.IdPublicacion);
-                if (IdRepetido)
-                {
-                    P.IdPublicacion = Publicaciones.Max(x => x.IdPublicacion) + 1;
-                    Publicaciones.Add(P);
-                }
-                else
-                {
-                    
-                    IdRepetido = false;
-                    Publicaciones.Add(P);
-                }
-            }
-            
-            if(e.Mensaje == "**-")
-            {
-                Usuarios.Remove(e.Usuario);
-            }
-            else
+            if(e.Foto == "**HELLO")
             {
                 Usuarios.Add(e.Usuario);
+            }
+            else if(e.Foto == "**BYE")
+            {
+                Usuarios.Remove(e.Usuario);
             }
 
         }

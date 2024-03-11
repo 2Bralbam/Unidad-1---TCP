@@ -74,9 +74,9 @@
                     </Style>
                 </Button.Resources>
             </Button>
-            <StackPanel Height="267" Width="104">
+            <StackPanel Height="289" Width="104">
                 <Label HorizontalAlignment="center">Usuarios Online</Label>
-                <ListBox Height="250" ItemsSource="{Binding Usuarios}">
+                <ListBox Height="266" ItemsSource="{Binding Usuarios}" Background="white">
 
                 </ListBox>
             </StackPanel>
