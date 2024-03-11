@@ -148,8 +148,14 @@ namespace Unidad1TCPClient.ViewModels
         {
             if (!string.IsNullOrEmpty(ImagenSeleccionada))
             {
+                MensajeDTO mensaje = new()
+                {
+                    Fecha = DateTime.Now,
+                    Foto = ImagenSeleccionada,
+                    Usuario = Dns.GetHostName()
+                };
                 // Eliminar en servidor
-                GaleriaService.EliminarImagen(ImagenSeleccionada);
+                GaleriaService.EliminarImagen(mensaje);
                 // Eliminar localmente
                 ListaImagenes.Remove(ImagenSeleccionada);
                 // Limpiar la imagen seleccionada
